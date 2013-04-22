@@ -1,0 +1,221 @@
+\input{./preamble}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Vorstellung}
+Zu meiner Person:\pause
+\begin{itemize}
+\item Simon Bischof
+\item Bachelor Informatik
+\item 6. Semester
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kontakt}
+\begin{itemize}
+\item E-Mail: simon.bischof2@student.kit.edu \pause
+\item bei inhaltlichen und sonstigen Fragen zu Algorithmen 1 \pause
+\item Liste zum Eintragen der Mailadresse
+\item für kurzfristige Informationen \pause
+\item Folien sind auf \textcolor{blue}{\underline{\url{https://github.com/ratefuchs/Algo1-Tut-SS13}}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Übungsbetrieb}
+Es gibt Übungsblätter:
+\begin{itemize}
+\item Übungsblattabgabe in Zweiergruppen
+\item Nur falls im gleichen Tutorium! \pause
+\item Ausgabe Mittwochs, Abgabe Freitag 9 Tage später \pause
+\item \textbf{Immer mit dem gleichen Partner abgeben!} \pause
+\item \textbf{Plagiate werden mit 0 Punkten bewertet!}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Beschriftung}
+\begin{itemize}
+\item Namen und Matrikelnummern (bei Partnerabgabe für beide)
+\item Nummer des Übungsblatts, Name des Tutors
+\item rechts oben groß: Nummer des Tutoriums! (mein Tut: 9)
+\item gut zusammenheften
+\item \textbf{Zuwiderhandelnde haben keinen Punktanspruch!}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Vorrechnen an der Tafel}
+\begin{itemize}
+\item Vorrechnen von Aufgaben des letzten Übungsblatts
+\item Im Mittel zwei Studenten pro Woche
+\item Jeder darf maximal einmal vorrechnen (erstes Mal zählt)
+\item Gibt maximal 6 Übungspunkte
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Was bringt das euch?}
+\begin{itemize}
+\item Punkte aus Übungsblättern
+\item + Punkte aus Mittsemesterklausur (Umfang etwa 2 ÜB)
+\item + Punkte aus dem Vorrechnen
+\item + \textbf{Zusatz-}Punkte aus Zusatzaufgaben
+\item $\Rightarrow$ Bonuspunkte auf bestandene Klausur
+\item (25\%$\to$1 Punkt, 50\%$\to$2, 75\%$\to$3) \pause
+\item Übungsblätter sind gute Übung für Klausur
+\item $\Rightarrow$ Blätter auch unabhängig vom Bonus machen
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{zum Tutorium}
+\begin{itemize}
+\item Hilfe bei Verständnisproblemen \pause
+\item angeleitetes Aufgabenlösen \pause
+\item Fragen/Vorschläge/Anmerkungen willkommen!
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+Was ist ein Algorithmus?
+\end{frame}
+
+\begin{frame}
+\frametitle{Pseudocode}
+\begin{itemize}
+\item Vereinfachte Programmiersprache \pause
+\item if, else, while, repeat \dots until, for, \dots \pause
+\item Blöcke durch Einrückung (vgl. Java: "\{" und "\}") \pause
+\item Zuweisung mit ":=", Kommentar "//"
+\item Tupelschreibweise: (c, s) = a+b+c \pause
+\item in Assertions beliebige Mathe-Ausdrücke: $\{i\geq 2\wedge \neg\exists a,b\geq 2: i=a\cdot b\}$
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Wiederholung: Die O-Notation}
+\begin{itemize}
+\item $O(f(n))=\{g(n):\exists c>0: \exists n_0\in\N^+: \forall n\geq n_0: g(n)\leq c\cdot f(n)\}$
+\item "$g$ wächst höchstens so schnell wie $f$" \pause
+\item Oft schreibt man statt z.B. $2n\in O(n)$ auch $2n=O(n)$ (ist allerdings eher unschön) \pause
+\item $o(f(n))=\{g(n):\forall c>0: \exists n_0\in\N^+: \forall n\geq n_0: g(n)< c\cdot f(n)\}$
+\item "$g$ wächst langsamer als $f$" \pause
+\item Außerdem: $\Omega$ (mindestens), $\omega$ (schneller), $\Theta$ (genau so schnell) \pause
+\item In dieser Vorlesung untersuchen wir oft den "worst case"
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Beispiel: Bubble-Sort}
+\begin{lstlisting}
+  function bubbleSort(a[0..n-1])
+  for j:=0 to n-1
+    for i:=0 to n-1
+      if a[i] > a[i+1]
+        (a[i],a[i+1]) := (a[i+1],a[i]) 
+\end{lstlisting}%\pause
+%Laufzeit ist $\Theta(n^2)$. Geht das noch besser?
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Beispiel: Bubble-Sort}
+\begin{lstlisting}
+  function bubbleSort2(a[0..n-1])
+    repeat
+      swapped := false
+      for i:=0 to n-1
+        if a[i] > a[i+1]
+          (a[i],a[i+1]) := (a[i+1],a[i]) 
+          swapped := true
+    until swapped = false
+\end{lstlisting}%\pause
+%Laufzeit ist im worst (und average) case $\Theta(n^2)$, im best case aber $\Theta(n)$.
+\end{frame}
+
+\begin{frame}
+\frametitle{Aufgaben zum O-Kalkül}
+Zeige oder widerlege:
+\begin{enumerate}
+\item $10n^2 + 5n^2 \in \omega(n^2)$
+\item $\log_a(n)\in\Theta(\log_b(n))$ ($a,b>1$)
+\item $n^2 \in o(n^2 \log(n))$
+\item $(\log(n))^5 \in o(n)$
+\item $2^n \in o(n^2)$
+\item $n! \in \omega(2^n)$
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Das Master-Theorem}
+Gegeben sei eine Rekurrenz-Gleichung der Form $T(n) = a \cdot T(\frac{n}{b}) + f(n)$.\\
+Es gibt nun drei Fälle:
+\begin{enumerate}
+\item $f(n) \in \mathcal{O}\left( n^{\log_b a - \varepsilon} \right)$ 
+für ein $\varepsilon>0$\\ $\Rightarrow$ $T(n) \in \Theta\left( n^{\log_b a} \right)$ \pause
+\item $f(n) \in \Theta\left( n^{\log_b a} \right)$\\ $\Rightarrow T(n)$ $\in \Theta\left( n^{\log_b a} \log(n)\right)$ \pause
+\item $f(n) \in \Omega\left( n^{\log_b a + \varepsilon} \right)$ für ein $\varepsilon>0$
+und ebenfalls für ein $c$ mit $0 < c < 1$ und alle hinreichend großen $n$ gilt:
+$a \cdot f( \textstyle \frac{n}{b} ) \leq c f(n)$\\ $\Rightarrow$ $T(n) \in \Theta(f(n))$
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Algorithmus von Karatsuba-Ofman}
+\begin{lstlisting}
+  function rectMult(a, b $\in$ $\N$)
+    assert a und b haben n = 2k Ziffern
+    if n = 1 then return a $\cdot$ b
+    Schreibe a als $a_1$ $\cdot$ $B^k$ + $a_0$
+    Schreibe b als $b_1$ $\cdot$ $B^k$ + $b_0$
+    $c_{11}$ := recMult($a_1$,$b_1$)
+    $c_{00}$ := recMult($a_0$,$b_0$)
+    $c_{0110}$ := recMult($a_1$ + $a_0$,$b_1$ + $b_0$)
+    e := $c_{11}$ $\cdot$ $B^{2k}$ + ($c_{0110}$ - $c_{11}$ - $c_{00}$) $\cdot$ $B^k$ + $c_{00}$
+    return e
+\end{lstlisting}%\pause
+%Mit Mastertheorem folgt: Die Laufzeit ist in $\Theta(n^{\log_2(3)})\approx\Theta(n^{1.58})$
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Beispiel: Lineare Suche}
+\begin{lstlisting}
+  function linearSearch(a[0..n-1], z)
+    for i:=0 to n-1
+      if a[i]=z
+      	return true
+    return false
+\end{lstlisting}%\pause
+%worst/average: $\Theta(n)$, best: $\Theta(1)$
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Beispiel: Binäre Suche}
+\begin{lstlisting}
+  function binarySearch(a[0..n-1], z)
+    assert a ist sortiert
+    (l,r):=(0,n-1)
+    while l$\leq$r
+      m:=$\lfloor \frac{l+r}{2}\rfloor$
+      if a[m]=z then return true
+      if a[m]>z then r:=m-1 else l:=m+1
+    return false
+\end{lstlisting}%\pause
+%worst/average: $\Theta(\log(n))$, best: $\Theta(1)$
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Beispiel: Bogosort}
+Hier die Grobstruktur:
+\begin{lstlisting}
+  function bogosort(a[0..n-1])
+    while a ist nicht sortiert
+      ordne Elemente von a per Zufall an
+\end{lstlisting}%\pause
+%best case: $\Theta(n)$, average case (laut Wikipedia): $Theta(n\cdot n!), und der worst case ist $\infty$!
+\end{frame} 
+\end{document}
