@@ -1,0 +1,210 @@
+\input{./preamble}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Zum Übungsblatt}
+\begin{itemize}
+\item Achtet bitte auf formale Korrektheit
+\begin{itemize}
+\item Besonders bei O-Notations-Beweisen ...
+\item ... und vollständiger Induktion (aktuelles Blatt)
+\end{itemize} \pause
+\item Schaut euch nochmal den Pseudocode an\pause
+\item Beachtet die Aufgabenstellung!
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Wiederholung: Vollständige Induktion}
+\begin{itemize}
+\item Induktionsanfang (meist $n=0$ oder $n=1$)
+\item Induktionsschritt ($n\rightsquigarrow n+1$)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Wiederholung: Schleifeninvarianten}
+Beweis ähnlich zu vollständiger Induktion
+\begin{itemize}
+\item Invariante gilt am Anfang
+\item Invariante bleibt bei einem Durchlauf (auch dem letzten!) erhalten
+\item Aus Invariante und Abbruchbedingung folgt die Nachbedingung
+\end{itemize}\pause
+Schleifeninvarianten beweisen nur die Korrektheit bei Terminierung!
+\end{frame}
+
+\begin{frame}
+\frametitle{Rekurrenzen}
+$T(n)=\begin{cases}1 & (n\leq n_0)\\ 3T(\lfloor\frac{n}{5}\rfloor+7)+cn^2 & (n>n_0)\end{cases}$\\[2em]
+\only<2>{Lösung: $\Theta(n^2)$}
+\end{frame}
+
+\begin{frame}
+\frametitle{Rekurrenzen}
+\begin{itemize}
+\item $T(n) = T(\lceil \frac{n}{4}\rceil)+T(\lfloor\frac{3n}{4}\rfloor)+n$, $T(1)=1$
+\item Lösung durch Auffalten des Rekursionsbaums\pause
+\item Und mit $T(n) = \begin{cases}1 & (n\leq 32) \\
+T(\lceil \frac{n}{4}\rceil)+T(\lfloor\frac{3n}{4}\rfloor+5)+n & (n>32)\end{cases}${\Huge ?}
+\only<3>{\item Lösung für beide Rekurrenzen ist: $\Theta(n \log n)$}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Rekurrenz (eine letzte)}
+\begin{itemize}
+\item $T(n) = 2T(\lfloor\sqrt{n}\rfloor)+\log n$, $T(1)=1$\pause
+\item Substituieren hilft!
+\only<3>{\item $T(n)\in O(\log n \cdot \log\log n)$}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Einschub: Graphen}
+\begin{itemize}
+\item Wichtige Begriffe: Knoten, Kanten, Relationen, (un)gerichtete Graphen, Knotengrade, Kantengewichte, knoteninduzierte Teilgraphen, Schlingen, Pfade, Kreise\pause
+\item Wichtige Graphen sind z.B. $K_3, K_4, K_5, K_{3,3}$.\pause
+\item Spezialfall Bäume: Zusammenhang, Bäume, Wurzeln, Wälder, Kinder, Eltern, ...
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{DAGs}
+\begin{itemize}
+\item "Directed acyclic graph": Gerichteter kreisfreier Graph
+\item Test: Iterativ Knoten mit Ausgangsgrad 0 entfernen; \\ G ist DAG $\Leftrightarrow$ Graph am Ende leer
+\item Test läuft mit passender Datenstruktur in $O(|V|+|E|)$
+\item Liefert auch topologische Sortierung
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+Datenstrukturen (für Folgen)
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Doppelt verkettete Listen}
+\begin{lstlisting}
+Class Handle = Pointer to Item
+
+//one cell in a doubly linked list
+Class Item of Element
+e : Element
+next : Handle
+prev : Handle
+invariant next$\to$prev = prev$\to$next = this
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Dummy-Header / Wächter-Element}
+\begin{itemize}
+\item Führe Element mit e=$\bot$ ein, benutze es als Listenkopf
+\item Zusätzlich: mache die Liste zyklisch\pause
+\item Invariante erfüllt, Vermeidung von Sonderfällen;\\ aber: mehr Speicherplatz
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Die Listenklasse}
+\begin{lstlisting}
+Class List of Element
+// Item h is the predecessor of the first element
+// and the successor of the last element.
+// Pos. before any proper element
+Function head : Handle; return address of h
+// init to empty sequence
+h = $(\bot, head, head)$ : Item
+
+// Simple access functions
+Function isEmpty : $\{0,1\}$; return h.next = head
+Function first : Handle; 
+     assert $\neg$isEmpty; return h.next
+Function last : Handle;
+     assert $\neg$isEmpty; return h.prev
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{splice}
+\begin{lstlisting}
+//Cut out $\langle a ,\ldots,b\rangle$ and insert after t
+Procedure splice(a,b,t:Handle)
+  assert b is not before a $\wedge$ t $\notin$ $\langle a ,\ldots,b\rangle$
+  //Cut out $\langle a ,\ldots,b\rangle$
+  $a^\prime :=a\to prev$
+  $b^\prime :=b\to next$
+  $a^\prime\to next := b^\prime$
+  $b^\prime\to prev := a^\prime$
+
+  //insert $\langle a ,\ldots,b\rangle$ after t
+  $t^\prime := t\to next$
+  $b\to next := t^\prime$
+  $a\to prev := t$
+  $t\to next := a$
+  $t^\prime\to prev := b$
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Und nun?}
+Wir benutzen eine einmal vorhandene Variable (static in Java):
+\begin{itemize}
+\item "freeList" enthält nicht benötigte Elemente
+\item "checkFreeList" sichert, dass diese nicht leer ist
+\end{itemize}\pause
+Was bringt uns das?
+\only<3>{Kann für splice benutzt werden!}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Wichtige Listenfunktionen}
+\begin{lstlisting}
+Procedure moveAfter(b,a : Handle) splice(b,b,a)
+Procedure moveToFront(b : Handle) moveAfter(b, head)
+Procedure moveToBack(b : Handle) moveAfter(b, last)
+
+Procedure remove(b : Handle)
+    moveAfter(b, freeList.head)
+Procedure popFront remove(first)
+Procedure popBack remove(last)
+
+//$(\langle a,\ldots,b\rangle,\langle c,\ldots,d\rangle)\rightsquigarrow (\langle a,\ldots,b,c,\ldots,d\rangle,\langle \rangle)$
+Procedure concat(L : List)
+    splice(L.first, L.last, last)
+//$\langle a,\ldots,b\rangle\rightsquigarrow\langle \rangle$
+Procedure makeEmpty freeList.concat(this)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Nun noch das Einfügen}
+\begin{lstlisting}
+Function insertAfter(x:Element, a:Handle) : Handle
+  //make sure freeList is nonempty.
+  checkFreeList
+  $a^\prime :=$ freeList.first
+  moveAfter($a^\prime,a$)
+  $a^\prime \to e := x$
+  return $a^\prime$
+  
+Function insertBefore(x:Element,b:Handle) : Handle
+    return insertAfter($x,b\to prev$)
+Procedure pushFront(x:Element) insertAfter(x, head)
+Procedure pushBack(x:Element) insertAfter(x, last)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kreativaufgabe}
+Gegeben sei ein Array A[1..n] mit n Zahlen und eine Zahl x. Nun soll ein Paar (A[i],A[j]) gefunden werden mit A[i]+A[j]=x.
+\begin{itemize}
+\item Geben Sie eine Lösung für x=33; A=(7,15,21,14,18,3,9) an. \\ \only<2->{Lösung: A[2]=15, A[5]=18}\pause
+\item Geben Sie einen effizienten Algorithmus an, der ein solches Paar in $O(n\log n)$ findet (falls es nicht existiert, soll NIL zurückgegeben werden).\pause
+\item Wie sieht es aus, wenn man alle Paare finden will?
+\end{itemize}
+\end{frame}
+\end{document}
