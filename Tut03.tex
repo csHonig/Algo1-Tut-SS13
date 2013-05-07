@@ -1,0 +1,149 @@
+\input{./preamble}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Zum Übungsblatt}
+\begin{itemize}
+\item Vorsicht beim Mastertheorem
+\begin{itemize}
+\item Immer hinschreiben, welcher Fall
+\item Immer $\varepsilon$ hinschreiben
+\item Vorsicht beim Runden von $\log_a b$
+\item Regularität ($\exists d\in (0,1):a f(\frac{n}{b})\leq d f(n)$) immer zeigen (und $d$ angeben)
+\item Es gibt noch eine einfache Version des Mastertheorems (siehe VL)
+\end{itemize}\pause
+\item Beweise für Invarianten etwas ausführlicher \pause
+\item Bei Aufgabe 3 kam nicht $\frac{1}{0}$, sondern die leere Summe (definiert als 0) raus
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{einfach verkettete Listen}
+\begin{itemize}
+\item Unterschied zur doppelt verketteten Liste?
+\only<2->{\item weniger Platzverbrauch, schneller}
+\only<3->{\item eingeschränkte Schnittstelle, z.B. kein "remove"}
+\only<4->{\item Invariante: Eingangsgrad = 1}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{wichtige Operationen}
+\begin{itemize}
+\item splice
+\begin{itemize}
+\item Beachtet die Schnittstelle!
+\item Function splice(a$^\prime$,b,t:Handle)\\ $\begin{pmatrix}a^\prime\to next\\t\to next\\b\to next\end{pmatrix}:=\begin{pmatrix}b\to next\\a^\prime\to next\\t\to next\end{pmatrix}$
+\end{itemize}\pause
+\item pushBack
+\only<3>{\begin{itemize}
+\item braucht Zeiger aufs letzte Element
+\end{itemize}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Felder (Arrays)}
+\begin{itemize}
+\item $A[i]=a_i$ falls $A=\langle a_0,\ldots,a_{n-1}\rangle$
+\item Beschränkte Felder (Bounded Arrays): bekannt
+\item Unbeschränkte Felder (Unbounded Arrays): pushBack, popBack, size
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Unbeschränkte Felder}
+\begin{itemize}
+\item Hinzufügen: size++, evtl. umkopieren (falls zu voll)
+\item Löschen: size-{}-, evtl. umkopieren (falls zu leer)
+\item Schlechte Implementierungen brauchen für $n$ Operationen bis zu $\Theta(n^2)$ Zeit
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Unbeschränke Felder mit teilweise ungenutztem Speicher}
+\begin{lstlisting}
+UArray of Element
+  w:=1 : $\mathbb{N}$ //allocated
+  n:=0 : $\mathbb{N}$ //actual
+  invariant $n\leq w<\alpha n$ or ($n=0$ and $w\leq 2$)
+  b : Array[0..w-1] of Element
+  
+  Operator [i:$\mathbb{N}$]:Element
+    assert $0\leq i<n$
+    return b[i]
+  
+  Function size:$\mathbb{N}$ return n
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{hinzufügen und löschen}
+\begin{lstlisting}
+Procedure pushBack(e:Element)
+  if n=w
+    //copy to an array of size 2n
+    reallocate(2n)
+  b[n]:=e
+  n++
+  
+Procedure popBack()
+  assert n>0
+  n--
+  if 4n$\leq$w and n>0
+    reallocate(2n)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Amortisierte Analyse}
+\begin{itemize}
+\item Durchschnittliche Dauer einer Operation in einer Folge von Operationen (im worst case!)\pause
+\item Sinnvoll, falls worst case garantiert selten auftritt\pause
+\item KEINE average-case-Betrachtung\pause
+\item Beweis z.B. mit Kontomethode (siehe VL)\pause
+\item pushBack und popBack haben eine amortisierte Laufzeit von O(1)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Amortisierte Analyse}
+\begin{itemize}
+\item Unbounded Arrays\pause
+\item Binärzähler: Ein Binärzähler unterstütze als einzige Operation eine Inkrementierung um 1. Der Binärzähler sei am Anfang mit 0 initialisiert. Für die Implementation der Inkrementierungen darf bloß die Operation "ändere das i-te Bit", welche konstanten Aufwand besitzt, verwendet werden. Berechnen Sie die amortisierten Kosten der Inkrementierung.\\
+\only<3>{Lösung: O(1)}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Stapel und Queues}
+\begin{itemize}
+\item effizient und einfach für bestimmte Operationen
+\item wenig fehleranfällig\pause
+\item Stack (LIFO), Queue (FIFO) und Deque (beides)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Aufgabe zu Datenstrukturen}
+Beschreiben Sie eine Datenstruktur die folgendes kann:
+\begin{itemize}
+\item pushBack und popBack in O(1) im Worst-Case nicht nur amortisiert.
+\item Zugriff auf das k-te Element in O(log n) im Worst-Case nicht nur amortisiert.
+\end{itemize}
+Nehmen Sie an, dass eine Speicherallokation beliebiger Größe in O(1) geht.
+\end{frame}
+
+\begin{frame}
+\frametitle{Aufgabe zu Datenstrukturen 2}
+Beschreiben Sie eine Datenstruktur die folgendes kann:
+\begin{itemize}
+\item pushBack und popBack in O(log n) im Worst-Case nicht nur amortisiert.
+\item Zugriff auf das k-te Element in O(1) im Worst-Case nicht nur amortisiert.
+\end{itemize}
+Nehmen Sie an, dass eine Speicherallokation beliebiger Größe in O(1) geht.
+\end{frame}
+\end{document}
