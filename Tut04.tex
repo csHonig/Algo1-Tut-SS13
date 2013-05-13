@@ -1,0 +1,121 @@
+\input{./preamble}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Zum Übungsblatt}
+\begin{itemize}
+\item Wenn eine Datenstruktur verlangt ist, immer die komplette Datenstruktur beschreiben (inklusive Art der Verkettung, first-/last-Pointer, Wächterelement?, \ldots)
+\item Spezialfälle (z.B. leere Liste) beachten
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Hashing}
+Ziel des Hashings ist, für eine Menge $M$ folgende Operationen erwartet in $O(1)$ zu unterstützen:
+\begin{itemize}
+\item insert(e): fügt ein Element ein
+\item lookup(k): suche ein Element mit Schlüssel k und gib es zurück (oder $\bot$, falls keines vorhanden)
+\item delete(k): lösche ein Element mit Schlüssel k
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Perfekte Hashfunktionen}
+\begin{itemize}
+\item Eine perfekte Hashfunktion $h$ bildet Elemente von $M$ injektiv auf eindeutige Einträge der Tabelle $t[0..m-1]$ ab\pause
+\item Problem: Wie finde ich eine solche Funktion?\pause
+\item Sonst: Kollisionsauflösung notwendig
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Hashing mit verketteten Listen}
+Verwende eine Tabelle $t[0..m-1]$ mit einfach verketteten Listen als Einträgen. In der Liste von $t[i]$ stehen alle Elemente $e\in M$ mit $h(e)=i$.\pause
+\begin{itemize}
+\item insert(e): hänge Element an den Anfang der entsprechenden Liste. Laufzeit: \only<3>{O(1)}
+\item lookup(k): durchsuche die Liste bei $t[h(k)]$. Laufzeit: \only<3>{O(Listenlänge)}
+\item lookup(k): lösche das entsprechende Element aus der Liste bei $t[h(k)]$. Laufzeit: \only<3>{O(Listenlänge)}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{zufällige Hashfunktionen}
+\begin{itemize}
+\item Satz 1: Gegeben sei eine Tabelle $t[0..m-1]$ und es sei$|M|\in O(m)$. Dann gilt für jedes $i\in \{0,\ldots,m-1\}$: In der Liste $t[i]$ ist die Anzahl erwarteter Kollisionen in $O(1)$.\pause
+\item Problem: wie findet und implementiert man zufällige Hashfunktionen?
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Universelles Hashing}
+\begin{itemize}
+\item $\mathcal{H}\subseteq \{0,\ldots,m-1\}^{Key}$ ist universell falls für alle $x, y\in Key$ mit $x\neq y$ und zufälligem $h\in\mathcal{H}$ gilt: $\mathbb{P}[h(x)=h(y)]=\frac{1}{m}$.\pause
+\item Satz 1 gilt auch für universelle Familien von Hashfunktionen.\pause
+\item Es sei $m$ eine Primzahl, $Key\subseteq \{0,\ldots,m-1\}^k$ und für $a\in \{0,\ldots,m-1\}^k$ sei $h_a(x):=a\cdot x \mod m$. Dann ist $H^\cdot:=\left\lbrace h_a \mid a\in \{0,\ldots,m-1\}^k\right\rbrace$ eine universelle Familie von Hashfunktionen.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Aufgabe zu Hashing}
+\begin{itemize}
+\item Gegeben sei eine Menge $M$ von Paaren von ganzen Zahlen im Bereich $1,\ldots,|M|$. $M$ definiert eine binäre Relation $R_M$. Skizzieren Sie einen Algorithmus, der in erwarteter Zeit $O(|M|)$ überprüft, ob $R_M$ symmetrisch ist.
+\item Begründen Sie die erreichte Laufzeit.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Hashing mit linear probing}
+\begin{itemize}
+\item Array, in dem Einträge direkt drinstehen
+\item zusätzliche Slots (der letzte Slot ist immer $\bot$)\pause
+\item insert: wenn Platz belegt, teste den nächsten Platz
+\item lookup: gehe Liste bis zum Ende durch
+\item delete: Elemente rutschen evtl. nach vorne
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kreativaufgabe}
+Entwerfen Sie eine Realisierung eines SparseArray. Dabei handelt es sich um eine Datenstruktur mit den Eigenschaften eines beschränkten Arrays mit schneller Erzeugung und schnellem Reset. Nehmen Sie dabei an, dass allocate beliebig viel uninitialisierten Speicher in konstanter Zeit liefert. Im Detail habe das SparseArray folgende Eigenschaften:
+\begin{itemize}
+\item Ein SparseArrays mit n Slots braucht O(n) Speicher.
+\item Erzeugen eines leeren SparseArrays mit n Slots braucht O(1) Zeit.
+\item Das SparseArray unterstützt eine Operation reset, die es in O(1) Zeit in leeren Zustand
+versetzt.
+\item Das SparseArray unterstützt die Operation get(i) und set(i, x) in O(1). Dabei liefert A.get(i)
+den Wert, der sich im i-ten Slot des SparseArray A befindet; A.set(i, x) setzt das
+Element im i-ten Slot auf den Wert x. Wurde der i-te Slot seit der Erzeugung bzw.
+dem letzten reset noch nicht mit auf einen bestimmten Wert gesetzt, so liefert A.get(i)
+einen speziellen Wert $\bot$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kreativaufgabe (Fortsetzung)}
+\begin{itemize}
+\item Nehmen Sie an, dass die Datenelemente, die Sie im SparseArray ablegen wollen, recht groß
+sind (also z.B. nicht nur einzelne Zahlen, sondern Records mit 10, 20 oder mehr Einträgen).
+Geht Ihre Realisierung unter dieser Annahme sparsam oder verschwenderisch mit dem
+Speicherplatz um? Wenn Sie Ihre Realisierung für verschwenderisch halten, überlegen Sie
+ob und wie Sie es besser machen können.
+\item Vergleichen Sie Ihr SparseArray mit bounded Arrays. Welche Vorteile und Nachteile sehen
+Sie im Hinblick auf den Speicherverbrauch und auf das Iterieren über alle Elemente mit
+set eingefügten Elemente?
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Feedback}
+\begin{enumerate}
+\item Wie gefällt euch die Vorlesung?
+\item Wie ist die Abstimmung zwischen Vorlesung und Übung?
+\item Wie gefällt euch mein Tut?
+\item Habt ihr Verbesserungsvorschläge?
+\item Womit habt ihr noch Schwierigkeiten?
+\item Welches Thema hat euch bisher am meisten gefallen?
+\end{enumerate}
+\end{frame}
+\end{document}
