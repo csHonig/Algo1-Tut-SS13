@@ -1,0 +1,159 @@
+\input{./preamble}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Zum Übungsblatt}
+Beachtet bei Hashing:
+\begin{itemize}
+\item Die Laufzeit O(1) für lookup/delete bei Hashing mit Verketten ist nur erwartet
+\item "Wähle eine zufällige Hashfunktion aus einer universellen Familie"
+\item Auf Satz 1 verweisen - insbesondere immer angeben, wie viele Slots die Hashtabelle hat
+\item vorne an Liste anfügen bei Hashing mit Verketten (warum?)
+\item zyklische Arrays brauchen kein Sentinel (implizit durch mod)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Sortieren}
+\begin{itemize}
+\item Gegeben sei eine Folge $s=\langle e_1,\ldots,e_n\rangle$ und eine lineare Ordnung $\leq$
+\item Gesucht: Folge $s^\prime=\langle e_1\prime,\ldots,e_n\prime\rangle$, sodass $s\prime$ Permutation von $s$ und $e_1\prime\leq e_2\prime\leq\ldots\leq e_n\prime$
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Wichtige Eigenschaften von Sortieralgorithmen}
+\begin{itemize}
+\item stabil: Elemente mit gleichem Wert behalten relative Reihenfolge bei
+\item inplace: nur "wenig" zusätzlicher Speicher nötig
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Insertionsort}
+\begin{itemize}
+\item Idee: Der Anfang des Arrays ist schon sortiert
+\item füge erstes Element des unsortierten Teils dort richtig ein
+\item sortierter Teil wächst
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Pseudocode}
+\begin{lstlisting}
+Procedure insertionSort(a:Array[1$\ldots$ n] of Element)
+  for i:=2 to n do
+    invariant $a[1]\leq\ldots\leq a[i-1]$
+    // move a[i] to the right place
+    e:=a[i]
+    if e<a[1] then //new minimum
+      for j:=i downto 2 do
+        a[j]:=a[j-1]
+      a[1]:=e
+    else //use a[1] as a sentinel
+      for (j:=i; a[j-1]>e; j--) a[j]:=a[j-1]
+      a[j]:=e
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Mergesort}
+\begin{lstlisting}
+Function mergeSort($\langle e_1,\ldots,e_n\rangle$) : Sequence of Element
+  if n=1 then return $\langle e_1\rangle$
+  else return merge(   //merge siehe Blatt 2, A4(a)
+               mergeSort($\langle e_1,\ldots,e_{\lfloor\frac{n}{2}\rfloor}\rangle$),
+               mergeSort($\langle e_{\lfloor\frac{n}{2}\rfloor+1},\ldots,e_n\rangle$))
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Untere Schranke}
+\begin{itemize}
+\item Satz: Deterministische vergleichsbasierte Sortieralgorithmen brauchen $n\log n-O(n)$ Vergleiche im schlechtesten Fall.\pause
+\item Dasselbe gilt auch für den average case\pause
+\item Damit ist die worst- und average-case-Laufzeit von Mergesort optimal
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Quicksort}
+\begin{itemize}
+\item Teile und herrsche wie bei Mergesort
+\item Aufwand jedoch vor der Rekursion\pause
+\item Quicksort ist kompliziert?\pause
+\item Trenne Idee von Implementierung
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Quicksort -- Grundidee}
+\begin{lstlisting}[language=Haskell]
+qsort :: (Ord a) => [a] -> [a]
+qsort []     = []
+qsort (p:ps) = qsort (filter (<p) ps) ++
+               [p] ++
+               qsort (filter (>=p) ps)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Laufzeit}
+\begin{itemize}
+\item Best Case? \only<2->{$O(n\log n)$}
+\only<3->{\item Worst Case? \only<4->{$O(n^2)$}}
+\only<5>{\item Average Case (und erwartete Laufzeit bei zufälliger Pivotwahl) in $O(n\log n)$}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Quicksort -- Arrayimplementierung}
+\begin{lstlisting}
+Procedure qSort(a:Array of Element; $l,r: \mathbb{N}$)
+  if $l\geq r$ then return
+  k:=pickPivotPos(a,l,r)
+  m:=partition(a,l,r,k)
+  qSort(a,l,m-1)
+  qSort(a,m+1,r)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Quicksort -- Partition}
+\begin{lstlisting}
+Function partition(a:Array of Element; $l,r,k: \mathbb{N}$)
+  p:=a[k]
+  swap(a[k],a[r])
+  i:=l
+  for j:=l to r-1 do
+    if a[j]$\leq$ p then
+      swap (a[i],a[j])
+      i++
+  swap (a[i],a[r])
+  return i
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Verbesserungen}
+\begin{itemize}
+\item Wenn Teilarray klein genug, Insertionsort verwenden\pause
+\item Im Worst-Case O(n) Speicher nötig für (Rekursions-)Stack $\Rightarrow$ halbrekursive Implementierung (Rekursion nur auf kleinerem Teil)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kreativaufgabe}
+Gegeben sei ein Array mit n verschiedenen Elementen (unsortiert, aber mit Ordnung) und eine
+Medianfunktion, die für ein (Teil-)Array mit m Elementen den Median deterministisch in O(m)
+berechnet.
+\begin{itemize}
+\item Finde einen Algorithmus, der das $\frac{1}{3}$-Perzentil deterministisch in O(n) berechnet.
+\item Finde einen Algorithmus, der die $\frac{1}{3^{k-1}},\frac{1}{3^{k-2}},\ldots,\frac{1}{3^2},\frac{1}{3}$-Perzentile deterministisch in O(n) berechnet. (Nicht in O(nk)!)
+\item Das Ganze geht inplace.
+\end{itemize}
+\end{frame}
+\end{document}
