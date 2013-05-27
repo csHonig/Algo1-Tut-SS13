@@ -1,0 +1,138 @@
+\input{./preamble}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Mittsemesterklausur}
+\begin{itemize}
+\item Nächsten Montag (statt VL)
+\item Pünktlich sein!
+\item Hilfsmittel: 1 DIN A4 einseitig handbeschriebener Zettel
+\item Unterschrift für selbständige Anfertigung
+\item Tutoriumsnummer auf die Klausur schreiben
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Zum Übungsblatt}
+\begin{itemize}
+\item Hashing: bei Verketten braucht Initialisierung $\Theta(|t|)$
+\item Hashing: Hinweise aus letztem Tut beachten!
+\item Wenn ihr eine Prozedur in Pseudocode hinschreibt: Name und Parameter angeben
+\item Algorithmen kann man auch sprachlich angeben (falls nicht anders verlangt)
+\item Bei Aufgabe 3 hätte Mergesort genügt
+\item A3: bei Mergesort minimal 4 oder 5 Vergleiche je nach Implementierung
+\item Quicksort aus VL verwenden
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Auswahl}
+\begin{itemize}
+\item Gegeben: Folge $s$, Zahl $k\in\mathbb{N}$
+\item Gesuckt: $k$.-kleinstes Element von $s$\pause
+\item Spezialfall: Median ($k=\lceil \frac{|s|}{2}\rceil$) oder allg. Quantile
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Quickselect (Laufzeit erwartet linear)}
+\begin{lstlisting}
+Function select($s$ : Sequence of Element;
+                $k$ : $\mathbb{N}$) : Element
+  assert $|s|\geq k$
+  pick $p\in s$ uniformly at random //pivot key
+  $a:=\langle e\in s : e < p\rangle$
+  if $|a|\geq k$ then return select($a,k$)
+  $b:=\langle e\in s : e = p\rangle$
+  if $|a|+|b|\geq k$ then return p
+  $c:=\langle e\in s : e > p\rangle$
+  return select($c,k-|a|-|b|$)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Bucketsort}
+\begin{lstlisting}
+Procedure KSort($s$ : Sequence of Element)
+  $b := \langle \langle\rangle, \langle\rangle, \ldots, \langle\rangle \rangle$
+        : Array[$0..K-1$] of Sequence of Element
+  foreach $e\in s$ do
+    $b$[key($e$)].pushBack($e$)
+  $s:=$ concatenation of $b[0],\ldots,b[K-1]$
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Bucketsort}
+\begin{itemize}
+\item Laufzeit O($n+K$)
+\item Arrayimplementierung möglich (siehe VL)
+\item Ist stabil 
+\end{itemize}\pause
+LSD-Radixsort
+\begin{itemize}
+\item sortiere Zahlen mit $d$ Stellen
+\item $d$-mal Bucketsort nach den Stellen 0,1,\ldots,$d-1$ (von hinten)
+\item Laufzeit O($d(n+K)$)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+Prioritätslisten
+\end{frame}
+
+\begin{frame}
+\frametitle{Prioritätslisten}
+\begin{itemize}
+\item Gegeben: Elemente mit Schlüsseln 
+\item Verwalte Menge $M$ von Elementen mit folgenden Operationen:\pause
+\item insert($e$): $M:=M\cup\{e\}$
+\item deleteMin: return and remove $\min M$
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kreativaufgabe}
+Gegeben sei ein Universum von Elementen die in einer Prioritätsliste verwaltet werden sollen. Die Wichtigkeit eines Elements hägt nur von seinem Schlüssel ab, wobei es nur k verschiedene Schlüssel geben soll. Man kennt den Algorithmus, der die Prioritätsliste verwenden soll, so gut, dass man weiß, dass alle Einfügungen eine geringere Priorität als das zuletzt entnommene Element haben.\\
+Finden Sie eine Datenstruktur, in die neue Elemente in O(1) eingefügt werden können, und die Entnahme armortisiert in O($\frac{k}{n}+1$) funktioniert. n sei dabei die Gesamtzahl jemals eingefügter Elemente.\\
+Interessant insbesondere für n > k.
+\end{frame}
+
+\begin{frame}
+\frametitle{(Min-)Heaps}
+\begin{itemize}
+\item Heap-Eigenschaft : Bäume (oder Wälder) mit $\forall v:parent(v)\leq v$\pause
+\item Binärer Heap: Heap, Binärbaum, Höhe $\lfloor \log n\rfloor$, fehlende Blätter rechts unten\pause
+\item Minimum = Wurzel
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Implizite Baum-Repräsentation}
+\begin{itemize}
+\item Array h[1..n]
+\item Schicht für Schicht\pause
+\item parent(j)=$\lfloor \frac{j}{2}\rfloor$
+\item linkes Kind(j)=$2j$
+\item rechtes Kind(j)=$2j+1$
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Pseudocode}
+\begin{lstlisting}
+Procedure insert(e:Element)
+  n++; h[n]:=e
+  siftUp(n) //siehe VL
+  
+Function deleteMin : Element
+  result = h[1] : Element
+  h[1] := h[n]; n--
+  siftDown(1) //siehe VL
+  return result
+\end{lstlisting}
+\end{frame}
+\end{document}
