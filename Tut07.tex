@@ -1,0 +1,110 @@
+\input{./preamble}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Binärer Heap: Laufzeit}
+\begin{itemize}
+\item min dauert O(1)\pause
+\item Höhe des Heaps ist $\lfloor\log n\rfloor$\pause
+\item insert dauert O(log n)
+\item deleteMin dauert O(log n)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Aufbau eines Heaps}
+\begin{itemize}
+\item Nacheinander die Elemente dem Heap hinzufügen?\pause
+\item Korrekte Lösung, aber nicht effizient
+\item Braucht im Worst-Case O($n\log n$) Zeit
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Linearzeit-Konstruktion}
+\begin{lstlisting}
+Procedure buildHeapRecursive($i:\mathbb{N}$)
+  if $4i\leq n$ then
+    buildHeapRecursive(2i)
+    buildHeapRecursive(2i+1)
+  siftDown(i)
+
+Procedure buildHeapBackwards
+  for $i:=\lfloor\frac{n}{2}\rfloor$ downto 1
+    siftDown(i)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Laufzeitanalyse}
+\begin{itemize}
+\item n Elemente, O(log n) im Worst Case pro Element\\
+$\Rightarrow$ O(n log n) Laufzeit?\pause
+\item Nein! Höhe der Teilbäume ist "genügend oft" klein
+\item Damit (Abschätzung siehe VL) ist Laufzeit in O(n)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Heapsort}
+\begin{lstlisting}
+Procedure heapSortDecreasing(a[1..n])
+  buildHeap(a)
+  for i:=n downto 2 do
+    h[i]:=deleteMin
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Eigenschaften}
+\begin{itemize}
+\item Sortiert absteigend\pause
+\item O(n log n) Laufzeit
+\item Implementierung mit nur O(1) zusätzlichem Speicher möglich\pause
+\item nicht stabil
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kreativaufgabe}
+\begin{itemize}
+\item Gegeben sind $n$ Pancakes in unterschiedlicher Größe und gestapelt. Man hat einen Pancake-
+Flipper zur Verfügung, mit dem man die obersten $l$ Pancakes umdrehen kann ($l$ beliebig).
+Entwickelt einen schnellen Algorithmus um die Pancakes zu sortieren.\pause
+\item Spaghettisort
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Adressierbare Prioritätslisten}
+\begin{lstlisting}
+Procedure build({$e_1,\ldots,e_n$}) M:={$e_1,\ldots,e_n$}
+Function size return |M|
+Procedure insert(e) M:=M$\cup${e}
+Function min return min M
+Function deleteMin e:=min M; M:=M\{e}; return e
+Function remove(h:Handle) e:=h; M:=M\{e}; return e
+Procedure decreaseKey(h:Handle, k:Key)
+              assert key(h)$\geq$k; key(h):=k
+Procedure merge(M$^\prime$) M:=M$\cup$M$^\prime$
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Laufzeiten}
+\begin{tabular}{c|c|c}
+Operation & Binary Heap & Fibonacchi Heap (Buch) \\ \hline
+build & O(n) & O(n) \\
+size & O(1) & O(1) \\
+min & O(1) & O(1) \\
+insert & O(log n) & O(log n) \\
+deleteMin & O(log n) & O(log n) \\
+remove & O(log n) & O(log n) \\
+decreaseKey & O(log n) & O(1) amort. \\
+merge & O(n) & O(1)
+\end{tabular}
+\end{frame}
+\end{document}
