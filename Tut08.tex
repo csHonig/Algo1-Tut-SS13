@@ -1,0 +1,134 @@
+\input{./preamble}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Wahlen der Studierendenschaft}
+Geht wählen!
+\begin{itemize}
+\item Wahl des Studierendenparlaments und der Fachschaftsvorstände
+\item Keine Bindung an bestimmte Wahlurnen
+\item Noch bis Freitag, 14.6., 15:00 Uhr an den meisten Urnen; bis 16:00 Uhr in der Mensa
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Probeklausur}
+Gut:
+\begin{itemize}
+\item Mastertheorem
+\item Hashtabellen
+\item DAG
+\end{itemize}
+Weniger gut:
+\begin{itemize}
+\item unbeschränkte Felder
+\item rectMult
+\item Datenstrukturinvariante doppelt-verkettete Liste / Heap-Eigenschaft
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Sortierte Folgen}
+\begin{itemize}
+\item Folge $\langle e_1,e_2,\ldots,e_n\rangle$ mit $e_1\leq e_2\leq \ldots\leq e_n$\pause
+\item wichtigste Funktion: M.locate(k) = address of min $\{e\in M\mid e\geq k\}$\pause
+\item hier: sortierte, zyklische Liste mit Dummy $\infty$ + Navigationsdatenstruktur\pause
+\item statische Variante: sortiertes Array
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Operationen}
+\begin{itemize}
+\item O(log n): insert, remove, update, locate
+\item O(1): min, max
+\item O(log n+|result|): rangeSearch
+\item O(n): (re)build\pause
+\item Weitere Möglichkeiten: concat, split, rank, select, rangeSize, \ldots
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Binärer Suchbaum}
+\begin{itemize}
+\item Blätter: Elemente der sortierten Folge
+\item innere Knoten: (k:Element, l:Teilbaum, r:Teilbaum)\pause
+\item über l erreichbare Blätter haben Werte $\leq$ k
+\item über r erreichbare Blätter haben Werte > k\pause
+\item locate einfach zu implementieren
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kreativaufgabe}
+Gegeben sei ein binärer Suchbaum, der auch in den inneren Knoten Elemente speichert. Jeder
+Knoten habe drei Zeiger, zwei Kindzeiger und einen Zeiger auf den Elternknoten (u.U. sind einige
+davon Nullzeiger). Die Elemente sind jedoch nicht zusätzlich in einer Liste enthalten, d.h. das
+nächstgrößere Element kann nicht direkt gefunden werden. Es sei ein $\infty$-Dummy enthalten.
+\begin{itemize}
+\item Implementiere find(x), also eine Funktion die einen Schlüssel x
+nimmt und entweder das passende Element aus der Datenstruktur zurückgibt, oder $\bot$ falls
+kein passendes Element enthalten ist. Die Laufzeit sollte in O(Baumtiefe) liegen.
+\item Implementiere locate(x) wie aus der Vorlesung. Die Laufzeit sollte
+in O(Baumtiefe) liegen.
+\item Implementiere locate(x) wie aus der Vorlesung. Die Baumknoten
+haben in diesem Fall aber keine Zeiger mehr auf ihre Elternknoten, und es soll nur O(1)
+zusätzlicher Speicher verwendet werden. Die Laufzeit sollte in O(Baumtiefe) liegen.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Laufzeit von locate}
+\begin{itemize}
+\item O(Höhe)\pause
+\item Balancierter Suchbaum: worst case O(log n)
+\item Für entartete Bäume aber O(n)\pause
+\item Sortieren mit binären Suchbäumen?
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{(a,b)-Bäume}
+\begin{itemize}
+\item a$geq$2, b$\geq$2a-1
+\item Blätter wie vorher; allerdings gleiche Tiefe
+\item innere Knoten mit Ausgangsgrad a..b
+\item Wurzel hat Ausgangsgrad 2..b (1 für $\langle\rangle$)\pause
+\item bei Ausgangsgrad d gibt es d-1 "Splitter"
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Locate}
+\begin{itemize}
+\item Code siehe VL\pause
+\item height=$h\leq 1+\lfloor\log_a\frac{n+1}{2}\rfloor$
+\item Laufzeit O(b$\cdot$height)
+\item Für $\{a,b\}\subseteq O(1)$ ist dies in O(log n)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Insert}
+\begin{itemize}
+\item Code siehe VL
+\item an der richtigen Stelle einfügen\pause
+\item falls Knoten voll: spalten, Trennelement nach oben durchreichen
+\item evtl. rekursiv weiter
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Delete}
+\begin{itemize}
+\item Code siehe VL
+\item Element aus Blattliste löschen
+\item Splitter entfernen\pause
+\item bei Unterlauf mit Nachbarknoten fusionieren (falls möglich)\pause
+\item sonst balancieren
+\end{itemize}
+\end{frame}
+\end{document}
