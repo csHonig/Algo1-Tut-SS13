@@ -1,0 +1,232 @@
+\input{./preamble}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Übungsblatt}
+\begin{itemize}
+\item Bei Heapsort: aktuellen Schritt hinschreiben
+\item Pointerumbiegung bei Aufgabe 2(c) explizit hinschreiben
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Programmierwettbewerb}
+\begin{itemize}
+\item Siehe Übungsfolien 7
+\item Bei Fragen könnt ihr euch an mich wenden
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Aus der Übung: Rot-Schwarz-Bäume}
+\begin{itemize}
+\item Balancierte Suchbäume mit zusätzlichen Eigenschaften
+\item Knoten haben Farbe: Rot oder Schwarz
+\item Lokal feststellbar, welche Operationen zum Balancieren nötig sind\pause
+\item Äquivalent zu (2,4)-Bäumen
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+Graphen
+\end{frame}
+
+\begin{frame}
+\frametitle{Konventionen}
+\begin{itemize}
+\item $G=(V,E)$, $V$ Kantenmenge, $E$ Knotenmenge\pause
+\item $n=|V|$, $m=|E|$, Knoten $s,t,u,v,w,x,y,z$\pause
+\item Kanten $e\in E$: Knotenpaare (gerichtet) oder 2-elementige Knotenmenge (ungerichtet)\pause
+\item ungerichtet $\to$ gerichtet durch bigerichtete Graphen
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kantenanfragen}
+\begin{itemize}
+\item speichere Kanten in einer Hashtabelle
+\item unabhängig von restlicher Struktur
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kantenfolgerepräsentation}
+\begin{itemize}
+\item Liste aller Kantenpaare\pause
+\item Kompakt, gute I/O
+\item Wenig sinnvolle Operationen unterstützt
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Adjazenzfeld}
+\begin{itemize}
+\item V=1..n oder V=0..n-1
+\item Kantenfeld E speichert Ziele gruppiert nach Startknoten
+\item V speichert Index der ersten ausgehenden Kante\pause
+\item Dummy-Eintrag V[n+1] speichert m+1
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Adjazenzliste}
+\begin{itemize}
+\item Knoten-Array mit doppelt verketterter Liste von ausgehenden Kanten\pause
+\item Einfaches Löschen und Einfügen von Kanten
+\item platz-, cacheineffizient
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Adjazenzmatrix}
+\begin{itemize}
+\item A$\in\{0,1\}^{n\times n}$; A(i,j)=1 $\Leftrightarrow$ (i,j)$\in$E\pause
+\item platzeffizient für sehr dichte Graphen, platzineffizient sonst
+\item einfache Kantenanfragen, langsame Navigation
+\item verbindet lineare Algebra und Graphentheorie
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Customization}
+\begin{itemize}
+\item Zuschneiden von Datenstrukturen für Algorithmen
+\item Manchmal implizite Repräsentation möglich
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kreativaufgabe}
+In dieser Aufgabe soll ein dynamisiertes Adjazenzfeld entwickelt werden. Mit anderen Worten:
+Gesucht ist eine Datenstruktur für gerichtete Graphen G = (V,E) mit folgenden Eigenschaften:
+\begin{itemize}
+\item Stabile und eindeutige KnotenIDs. Knoten sollen durch IDs eindeutig identifiziert werden.
+Diese IDs sollen Zahlen aus $\mathbb{N}_0$ sein. Dabei seien die KnotenIDs stabil, d.h. die ID eines
+Knotens ändere sich nie solange dieser Knoten existiert (nach Entfernen eines Knotens darf
+dessen ID jedoch neu vergeben werden).
+\item Eindeutige KantenIDs. Die Kanten sollen ebenfalls durch IDs eindeutig identifiziert werden.
+Allerdings müssen diese nicht unbedingt Zahlen aus $\mathbb{N}_0$ sein und sie müssen auch
+nicht stabil sein.
+\item Effizienter Wahlfreier Zugriff auf Knoten und Kanten. Es gibt die Operationen
+ node(u : NodeID) : Handle of Node und
+ edge(e : EdgeID) : Handle of Edge,
+die in O(1) Zeit einen Handle auf das Knoten bzw. Kantenobjekt zu einer Knoten- bzw.
+Kanten-ID liefern.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+\item Effiziente Navigation. Es gibt die Operationen
+ firstEdge(v : NodeID) : EdgeID $\cup \{\bot\}$ und
+ nextEdge(e : EdgeID) : EdgeID $\cup \{\bot\}$
+mit deren Hilfe wie folgt über alle ausgehenden Kanten eines Knoten v iteriert werden
+kann in einem Graph G:\\
+for ( EdgeID e := graph.firstEdge(v); e $\neq\bot$; e := nextEdge(e) )\\
+$h_e$ := G:edge(e) : Handle of Edge\\
+/* do something */\\
+end for\\
+Sowohl firstEdge als auch nextEdge dürfen höchstens O(1) Zeit brauchen.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+\item Amortisiert konstantes Einfügen von Knoten und Kanten. Es gibt Operationen
+ insertNode : NodeID und
+ insertEdge(u, v : NodeID) : EdgeID,
+die in amortisiert konstanter Zeit einen neuen Knoten bzw. eine neue Kanten von u nach v
+einfügen und jeweils die ID des neu erzeugten Elementes zurückliefern. Beide Operationen
+dürfen höchstens amortisiert konstante Zeit kosten.
+\item Amortisiert konstantes Entfernen von Knoten und Kanten. Es gibt Operationen
+ deleteNode(v : NodeID) und
+ deleteEdge(e : EdgeID),
+die einen Knoten bzw. eine Kante entfernen. Der Einfachheit halber darf ein Knoten dabei
+nur entfernt werden, wenn bereits alle seine Kanten entfernt worden sind. Beide Operationen
+dürfen höchstens amortisiert konstante Zeit kosten.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+\item Überlegen Sie sich, wie Sie diese Datenstruktur realisieren.
+\item Begründen Sie, warum die beschriebenen Operationen in Ihrer Realisierung das geforderte
+Laufzeitverhalten aufweisen.
+\item Wieviel Speicher kann ein Graph mit Ihrer Realisierung im schlimmsten Fall belegen
+(abhängig von aktuellen oder zwischenzeitlichen Werten von |V| und |E| und das nicht
+nur im O-Kalkül)? Wieviel im besten Fall? Vergleichen Sie mit dem Speicherverbrauch
+des statischen Adjazenzfeldes aus der Vorlesung.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Graphtraversierung}
+\begin{itemize}
+\item Systematisches Durchsuchen eines Graphen\pause
+\item Klassifizierung von Kanten als Baum-, Vorwärts-, Quer- und Rückwärtskanten
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Breitensuche}
+\begin{itemize}
+\item Wähle Startknoten s
+\item Berechnet Abstand zu s (pro Kante Abstand 1)\pause
+\item Berechnet Baum Schicht für Schicht\pause
+\item Keine Vorwärtskanten (warum?)\pause
+\item Speichert Distanz zu s und Vorgänger (parent[s]=s)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Tiefensuche}
+\begin{itemize}
+\item Wähle Startknoten s\pause
+\item versuche soweit wie möglich zu gehen\pause
+\item Keine weitere Kante: Backtracken
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Markierungen etc.}
+\begin{itemize}
+\item Markiere besuchte Knoten\pause
+\item Verwalte Zähler dfsPos, finishingTime : 1..n\pause
+\item beim Besuchen: dfsNum[w]=dfsPos++
+\item beim Abschließen: finishTime[w]=finishingTime++
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Klassifikation von Kanten}
+\begin{tabular}{l||l|l|l}
+type & dfsNum[v]< & finishTime[w]< & w is\\
+(v,w) & dfsNum[w] & finishTime[v] & marked\\\hline
+tree & yes & yes & no\\
+forward & yes & yes & yes\\
+backward & no & no & yes\\
+cross & no & yes & yes\\
+\end{tabular}
+\end{frame}
+
+\begin{frame}
+\frametitle{DAG/Topologische Sortierung}
+\begin{itemize}
+\item G DAG $\Leftrightarrow$ DFS finded keine Rückwärtskante\pause
+\item Dann liefert t(w):=n-finishingTime[w] eine topologische Sortierung
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{starke Zusammenhangskomponenten}
+\begin{itemize}
+\item Starke Zusammenhangskomponenten
+Betrachte die Relation $\stackrel{*}{\leftrightarrow}$ mit $u\stackrel{*}{\leftrightarrow}v$ falls $\exists$ Pfad $\langle v,\ldots,u\rangle$ und $\exists$ Pfad $\langle u,\ldots,v\rangle$
+\item $\stackrel{*}{\leftrightarrow}$ ist Äquivalenzrelation (warum?)\pause
+\item Die Äquivalenzklassen von $\stackrel{*}{\leftrightarrow}$ bezeichnet man als starke Zusammenhangskomponenten.
+\end{itemize}
+\end{frame}
+\end{document}
