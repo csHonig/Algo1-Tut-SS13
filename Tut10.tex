@@ -1,0 +1,133 @@
+\input{./preamble}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Übungsblatt}
+Aufgabenstellung lesen!
+\begin{itemize}
+\item Rang in (a,b)-Bäumen
+\item Korrektheit begründen
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kreativaufgabe}
+Gegeben sei ein gerichteter, stark zusammenhängender Graph in folgender Darstellung:
+\begin{itemize}
+\item Ein Knotenarray, das zu jedem Knoten v einen Eintrag mit seiner ID und einen Zeiger auf ein
+Array mit den von v ausgehenden Kanten enthält. Die Knoten haben eindeutige IDs.
+\item Das Kantenarray mit den ausgehenden Kanten von v enthält für jede Kante e einen Eintrag mit
+ihrer ID und der ID des Zielknotens der Kante.
+\end{itemize}
+Auf diesem Graphen soll nun eine BFS ausgeführt werden, wobei zu jedem Zeitpunkt nur O(1) zusätzlicher
+Speicher verwendet werden soll. Die Laufzeit darf dabei schlechter als bei der üblichen BFS sein.
+Die Art der Darstellung des Graphen soll während der BFS erhalten bleiben, es ist jedoch erlaubt z.B.
+die Knoten im Knotenarray zu permutieren.
+\end{frame}
+
+\begin{frame}
+\frametitle{Kreativaufgabe (Forts.)}
+Geben Sie eine Pseudocode-Implementierung der BFS an die diese Bedingungen erfüllt und begründen
+Sie warum diese Implementierung nur O(1) zusätzlichen Speicher benötigt. Es soll dabei für jeden
+Knoten eine unbekannte Funktion f aufgerufen werden, die als Eingabe die Knoten-ID und die Ebene
+(Entfernung zum Startknoten) des Knotens hat. Es kann angenommen werden, dass f während der
+Ausführung O(1) und nach der Ausführung keinen Speicher benötigt.
+\end{frame}
+
+\begin{frame}
+\Huge{Kürzeste Wege}
+\end{frame}
+
+\begin{frame}
+\frametitle{Problemstellung}
+\begin{itemize}
+\item Gegeben seien ein Graph $G=(V,E)$, eine Kosten- oder Kantengewichts-Funktion $c:E\to \mathbb{R}$ und ein Startknoten $s\in V$
+\item Gesucht sei für alle $v\in V$ die Länge $\mu(v)$ des kürzesten Pfades von $s$ nach $v$
+\item oft auch der Pfad selbst
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Grundlegendes}
+\begin{itemize}
+\item Gibt es immer einen kürzesten Pfad? \visible<2->{Nein, nicht bei negativen Kreisen.}
+\visible<3->{\item Einfache Lösung, falls $c(e)\equiv c\geq 0$ für alle $e\in E$?} \visible<4->{Breitensuche}
+\visible<5->{\item Einfache Lösung für DAGs?} \visible<6->{Topologische Sortierung nutzen.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Dijkstras Algorithmus}
+Datenstrukturen, Initialisierung:
+\begin{itemize}
+\item d[v]:= vorläufige Distanz von s nach v (d[v]$\geq\mu$(v))
+\item parent[v]:= Vorgänger von v auf vorläufigem kürzesten Pfad
+\visible<2->{\item für $v\in V\setminus\{s\}$: d[v]:=$\infty$, parent[v]:=$\bot$
+\item d[s]:=0; parent[s]:=s}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Relaxierung einer Kante (u,v)}
+\begin{itemize}
+\item falls d[u] + c(u,v) $\leq$ d[v]: setze d[v] := d[u] + c(u,v) und parent[v]:=u\pause
+\item Distanzen und parent ändern sich i.A. mehrmals\pause
+\item Distanz wird dabei nie länger
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Algorithmus}
+\begin{lstlisting}
+initialize d, parent
+all nodes are non-scanned
+while $\exists$ non-scanned node u with d[u]<$\infty$
+    u:=non-scanned node v with minimal d[v]
+    relax all edges (u,v) out of u
+    u is scanned now
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Implementierung}
+\begin{itemize}
+\item verwende adressierbare Prioritätsliste
+\item Schlüssel ist d[v]\pause
+\item "Dijkstra = BFS mit PQ statt FIFO"
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Korrektheit}
+\begin{itemize}
+\item Nur für nichtnegative Kantengewichte garantiert!\pause
+\item Zeige: jeder erreichbare Knoten wird gescannt...
+\item und für jeden gescannten Knoten stimmt die Entfernung
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Laufzeit}
+m-Mal decreaseKey und jeweils n-Mal insert und deleteMin\pause
+\begin{itemize}
+\item Dijkstra (normale Arrays): O(m+n$^2$)
+\item Binärer Heap (Prioritätsliste): O((m+n)log n)
+\item Fibonacci-Heaps: O(m+n log n)\pause
+\item Monotone ganzzahlige Prior.: O(n+m)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Bellman-Ford}
+\begin{itemize}
+\item relaxiere alle Kanten (n-1)-mal
+\item funktioniert auch mit negativen Kantengewicht
+\item erkennt negative Kreise\pause
+\item Laufzeit O(mn)
+\end{itemize}
+\end{frame}
+
+\end{document}
