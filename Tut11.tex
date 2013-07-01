@@ -1,0 +1,137 @@
+\input{./preamble}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Übungsblatt}
+\begin{itemize}
+\item Aufgabenstellung lesen!
+\item "Gegenkanten" von Baumkanten sind auch Rückwärtskanten
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kreativaufgabe}
+Betrachte eine Menge von Währungen C mit einem Umtauschkurs von $r_{ij}$ (man erhält $r_{ij}$ Einheiten von Währung j für eine Einheit von Währung i). Eine Währungs-Arbitrage ist möglich, wenn es eine Folge von elementaren Umtauschoperationen (Transaktionen) gibt, die mit einer Einheit einer Währung beginnt, und mit mehr als einer Einheit derselben Währung endet.\\
+Beschreibe einen Algorithmus, mit dem man für eine gegebenen Umtauschmatrix bestimmen kann, ob Währungs-Arbitrage möglich ist. Beweise die Korrektheit des Algorithmus.\\
+Hinweis: log(xy) = log x + log y, log(1) = 0, siehe auch Buch Seite 207
+\end{frame}
+
+\begin{frame}
+\frametitle{Minimale Spannbäume (MST)}
+Gegeben:
+\begin{itemize}
+\item ungerichteter (zusammenhängender) Graph (V,E)
+\item Kanten als zweielementige Teilmengen $e\subseteq E$
+\item Kantengewichte c(e)$\in\mathbb{R}_+$
+\end{itemize}\pause
+Finde Baum (V,T) mit minimalem Gesamtgewicht, der alle Knoten verbindet
+\end{frame}
+
+\begin{frame}
+\frametitle{Auswahl der Kanten}
+Schnitteigenschaft
+\begin{itemize}
+\item Sei $S\subseteq V$ beliebig
+\item Betrachte die Schnittkanten $C=\{\{u,v\}\in E:u\in S,v\in V\setminus S\}$\pause
+\item Die leichteste Kante in C kann in einem MST verwendet werden
+\end{itemize}\pause
+Kreiseigenschaft: Die schwerste Kante auf einem Kreis wird nicht für einen MST benötigt
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Jarník-Prim}
+\begin{lstlisting}
+T := $\emptyset$
+S := {s} for arbitrary start node s
+repeat n-1 times
+  find (u,v) fulfilling the cut property for S
+  S := S $\cup$ {v}
+  T := T $\cup$ {(u,v)}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Laufzeit}
+\begin{itemize}
+\item ähnlich Dijkstra
+\item O((m+n)log n) mit binären Heaps
+\item O(m+n log n) mit Fibonacci Heaps\pause
+\item Wichtigster Unterschied: monotone PQs reichen nicht
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Kruskal}
+\begin{lstlisting}
+T := $\emptyset$
+foreach (u,v)$\in$E in ascending order of weight do
+  if u and v are in different subtrees of (V,T)
+  T := T $\cup$ {(u,v)}
+return T
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Union-Find-Datenstruktur}
+Verwalte Partition der Menge 1..n, d.h. Mengen (Blocks) $M_1,\ldots,M_k$ mit
+\begin{itemize}
+\item $M_1\cup\ldots\cup M_k=1..n$
+\item $\forall i\neq j:M_i\cap M_j=\emptyset$
+\end{itemize}\pause
+Jede Menge hat einen Repräsentanten
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Pseudocode}
+\begin{lstlisting}
+Class UnionFind(n:$\mathbb{N}$)
+  Procedure union(i,j:1..n)
+  Function find(i:1..n):1..n
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Implementierungen}
+\begin{itemize}
+\item Bäume mit parent-Zeigern: find im worst case in $\Theta(n)$\pause
+\item Pfadkompression (bei find: parent von allen durchlaufenen Knoten auf Repräsentanten umbiegen): find amortisiert in O(log n)\pause
+\item Union-By-Rank (Rank = Tiefe; halte damit den Baum einigermaßen balanciert): find in O(log n)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pfadkompression + Union-By-Rank}
+\begin{itemize}
+\item m find- und n link-Operationen brauchen O($m\alpha_T(m,n)$)
+\item $\alpha_T$ ist die inverse Ackermannfunktion (welche SEHR schnell wächst)
+\item $\alpha_T(m,n)\in\omega(1)$ aber $\leq$ 4 für "sinnvolle" m,n
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Laufzeit Kruskal}
+\begin{itemize}
+\item Durch Kantensortierung O(m log m)
+\item Besser bei ganzzahligen Kantengewichten
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Vergleich Jarník-Prim vs. Kruskal}
+Pro Jarník-Prim
+\begin{itemize}
+\item Asymptotisch gut für alle m,n
+\item Sehr schnell für m$\ll$n
+\end{itemize}
+Pro Kruskal
+\begin{itemize}
+\item Gut für m$\in$ O(n)
+\item Braucht nur Kantenliste
+\item Profitiert von schnellen Sortierern (ganzzahlig, parallel,\ldots)
+\item Verfeinerungen auch gut für große $\frac{m}{n}$
+\end{itemize}
+\end{frame}
+\end{document}
