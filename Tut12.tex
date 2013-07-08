@@ -1,0 +1,108 @@
+\input{./preamble}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Werbeblock}
+\begin{itemize}
+\item 12.07.: Info-Fakultätsfest (s. algo2.iti.kit.edu/documents/algo1-2013/Vorlesungswerbung\_TDI13.ppt)
+\item 12.07.: Mathe-Sommerfest (s. http://www.math.kit.edu/event/sommerfest/)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Lineare Programme}
+\begin{itemize}
+\item n Variablen, m Constraints\pause
+\item minimiere/maximiere f(x)=$\sum c_i x_i$
+\item $\sum a_{ij} x_i \leq b_j$ für $j\in\{1,\ldots,m\}$\pause
+\item Matrixdarstellung: min/max $c^t x$ und $A x\leq b$\pause
+\item in Polyzeit lösbar\pause
+\item Dualitätssatz
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{(Mixed) Integer Lineare Programme}
+\begin{itemize}
+\item Lineare Programme mit (teilweise) ganzzahligen Variablen\pause
+\item NP-schwer\pause
+\item Relaxierung möglich (danach runden!)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Greedy-Algorithmen}
+\begin{itemize}
+\item treffe jeweils eine lokal optimale Entscheidung
+\item dadurch eventuell nicht global optimal
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Greedy-Algorithmen}
+\begin{itemize}
+\item Nur wenige optimale Greedy-Algorithmen: \only<2->{Dijkstra, Jarník-Prim, Kruskal}
+\only<3->{\item Oft aber Näherungslösungen (z.B. Rucksackproblem, Matchings)}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Dynamische Programmierung}
+Anwendbar, wenn das Optimalitätsprinzip gilt:
+\begin{itemize}
+\item Optimale Lösungen bestehen aus optimalen Löungen für Teilprobleme
+\item Mehrere optimale Lösungen: es ist egal welche benutzt wird
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Wie wendet man DP an?}
+\begin{itemize}
+\item Was sind die Teilprobleme? Kreativität!
+\item Wie setzen sich optimale Lösungen aus Teilproblemlösungen zusammen? Beweisnot
+\item Bottom-up Aufbau der Lösungstabelle: einfach
+\item Rekonstruktion der Lösung: einfach
+\item Verfeinerungen (Platz sparen, Cache-effizient, Parallelisierung): Standard-Trickkiste
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Aufgabe}
+Gegeben sei ein Farbbild, das aus einem Feld A[1..m,1..n] von Pixeln besteht. Nehmen Sie an, wir würden das Bild gerne leicht komprimieren.\\
+Genauer: Wir würden gerne ein Pixel in jeder der m Zeilen entfernen, sodass das Gesamtbild um ein Pixel schmaler wird. Um störende visuelle Effekte zu vermeiden sei gefordert, dass die entfernten Pixel in zwei benachbarten Zeilen in der gleichen oder in adjazenten Spalten liegen. Die zu entfernenden Pixel bilden eine sogenannte Naht, die in der obersten Zeile beginnt und in der untersten Zeile endet, wobei zwei aufeinanderfolgende Pixel der Naht vertikal oder diagonal
+zueinandern adjazent sind.
+\begin{itemize}
+\item Zeigen Sie, dass für n>1 die Anzahl der möglichen Pfade mindestens exponentiell in m wächst.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Aufgabe (Fortsetzung)}
+\begin{itemize}
+\item  Setzen Sie nun voraus, dass zu jedem Pixel A[i,j] ein reelwertiger Bruchwert d[i,j] existiert, der angibt, wie störend es wäre, Pixel A[i,j] zu entfernen. Intuitiv gesehen gilt, dass je kleiner der Bruchwert eines Pixels ist, umso ähnlicher ist der Pixel zu seinen Nachbarn. Setzen Sie weiterhin voraus, dass wir den Bruchwert einer Naht als die Summe der Bruchwerte ihrer Pixel definieren. Geben Sie einen Algorithmus an, um eine Naht mit einem minimalen Bruchwert zu berechnen. Geben Sie die Komplexität Ihres Algorithmus an.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Weitere Beispiele}
+\begin{itemize}
+\item Edit distance/approx. string matching
+\item Verkettete Matrixmultiplikation
+\item Rucksackproblem
+\item Geld wechseln
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Weitere Lösungsansätze}
+\begin{itemize}
+\item Systematische Suche (evtl. mit Branch and Bound): z.B. Alpha-Beta-Algorithmus\pause
+\item Lokale Suche: Hill Climbing\pause
+\item Simulated Annealing: Genaueres in Eingebettete Systeme 2\pause
+\item Evolutionäre / Genetische Algorithmen
+\end{itemize}
+\end{frame}
+\end{document}
